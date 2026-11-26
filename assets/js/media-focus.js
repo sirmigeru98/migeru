@@ -67,5 +67,19 @@
       lockScroll();
       dialog.querySelector('.media-focus-close').focus();
     });
+    if (media.matches('img, svg.media-illustration')) {
+      media.classList.add('media-focus-clickable');
+      media.addEventListener('click', () => button.click());
+    }
+    if (media.matches('video')) {
+      media.classList.add('media-focus-clickable');
+      media.addEventListener('click', event => {
+        const bounds = media.getBoundingClientRect();
+        const controlsArea = Math.min(64, bounds.height / 3);
+        if (event.clientY >= bounds.bottom - controlsArea) return;
+        event.preventDefault();
+        button.click();
+      });
+    }
   });
 })();
