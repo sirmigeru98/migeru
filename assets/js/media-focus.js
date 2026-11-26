@@ -10,6 +10,53 @@
   const stage = dialog.querySelector('.media-focus-content');
   const caption = dialog.querySelector('.media-focus-caption');
   let opener;
+  let galleryImages = [];
+  let galleryIndex = 0;
+  let sourceGallery = null;
+  const galleryNav = document.createElement('div');
+  galleryNav.className = 'focus-gallery-nav';
+  galleryNav.hidden = true;
+  galleryNav.innerHTML = '<button type="button" class="focus-gallery-prev" aria-label="imagen anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5 7.5 12l7 7"/></svg></button><span class="focus-gallery-dots" aria-label="elegir imagen"></span><button type="button" class="focus-gallery-next" aria-label="imagen siguiente"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 5 7 7-7 7"/></svg></button><span class="focus-gallery-status" aria-live="polite"></span>';
+  stage.insertAdjacentElement('afterend', galleryNav);
+  const prev = galleryNav.querySelector('.focus-gallery-prev');
+  const next = galleryNav.querySelector('.focus-gallery-next');
+  const dots = galleryNav.querySelector('.focus-gallery-dots');
+  const status = galleryNav.querySelector('.focus-gallery-status');
+  const showImage = index => {
+    galleryIndex = Math.max(0, Math.min(galleryImages.length - 1, index));
+    const image = galleryImages[galleryIndex];
+    const copy = image.cloneNode(true);
+    copy.removeAttribute('tabindex');
+    copy.removeAttribute('role');
+    copy.removeAttribute('aria-label');
+    copy.classList.remove('media-focus-clickable');
+    stage.replaceChildren(copy);
+    caption.textContent = image.alt || '';
+    prev.disabled = galleryIndex === 0;
+    next.disabled = galleryIndex === galleryImages.length - 1;
+    status.textContent = `imagen ${galleryIndex + 1} de ${galleryImages.length}`;
+    dots.querySelectorAll('button').forEach((dot, i) => {
+      if (i === galleryIndex) dot.setAttribute('aria-current', 'true');
+      else dot.removeAttribute('aria-current');
+    });
+  };
+  prev.addEventListener('click', () => showImage(galleryIndex - 1));
+  next.addEventListener('click', () => showImage(galleryIndex + 1));
+  dialog.addEventListener('keydown', event => {
+    if (galleryNav.hidden) return;
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      event.preventDefault();
+      showImage(galleryIndex + (event.key === 'ArrowRight' ? 1 : -1));
+    }
+  });
+  let touchStartX = null;
+  stage.addEventListener('touchstart', event => { if (!galleryNav.hidden && event.touches.length === 1) touchStartX = event.touches[0].clientX; }, { passive: true });
+  stage.addEventListener('touchend', event => {
+    if (touchStartX === null || galleryNav.hidden || !event.changedTouches.length) return;
+    const distance = event.changedTouches[0].clientX - touchStartX;
+    touchStartX = null;
+    if (Math.abs(distance) > 45) showImage(galleryIndex + (distance < 0 ? 1 : -1));
+  }, { passive: true });
   let scrollPosition = 0;
   let previousOverflow = '';
   let previousBodyStyle = '';
@@ -34,6 +81,8 @@
   dialog.addEventListener('close', () => {
     stage.replaceChildren();
     caption.textContent = '';
+    if (sourceGallery) { sourceGallery.scrollLeft = galleryIndex * sourceGallery.clientWidth; opener = galleryImages[galleryIndex]; }
+    sourceGallery = null; galleryImages = []; galleryNav.hidden = true; dots.replaceChildren();
     unlockScroll();
     if (opener) opener.focus({ preventScroll: true });
   });
@@ -52,6 +101,28 @@
     container.appendChild(button);
     button.addEventListener('click', () => {
       opener = button;
+      const gallery = media.matches('img') ? container.closest('.media-gallery') : null;
+      galleryImages = gallery ? Array.from(gallery.querySelectorAll('.media-focus-item > img')) : [];
+      sourceGallery = galleryImages.length > 1 ? gallery : null;
+      if (sourceGallery) {
+        galleryIndex = galleryImages.indexOf(media);
+        dots.replaceChildren();
+        galleryImages.forEach((image, index) => {
+          const dot = document.createElement('button');
+          dot.type = 'button';
+          dot.className = 'focus-gallery-dot';
+          dot.setAttribute('aria-label', `ir a la imagen ${index + 1}`);
+          dot.addEventListener('click', () => showImage(index));
+          dots.appendChild(dot);
+        });
+        galleryNav.hidden = false;
+        showImage(galleryIndex);
+        dialog.showModal();
+        lockScroll();
+        dialog.querySelector('.media-focus-close').focus();
+        return;
+      }
+      galleryNav.hidden = true;
       const copy = media.cloneNode(true);
       if (copy.matches('audio, video')) {
         media.pause();
