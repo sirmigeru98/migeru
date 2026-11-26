@@ -3,4 +3,21 @@ layout: default
 title: todas las historias
 permalink: /historias/
 ---
-<section class="wrap archive-page"><header class="archive-header"><div class="eyebrow">escenas, ideas y recuerdos</div><h1>todas las historias<span>.</span></h1><p>aquí encontrarás lo que he escrito, ordenado por año.</p></header>{% assign years = site.posts | group_by_exp: 'post', 'post.date | date: "%Y"' %}{% for year in years %}<section class="archive-year" aria-labelledby="year-{{ year.name }}"><h2 id="year-{{ year.name }}">{{ year.name }}</h2><div class="post-list">{% for post in year.items %}<article class="post-row"><div class="post-meta"><span>{{ post.category | default: 'notas' }}</span><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%d.%m.%Y' }}</time></div><div class="post-summary"><h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3><p>{{ post.description | default: post.excerpt | strip_html }}</p></div></article>{% endfor %}</div></section>{% else %}<p>todavía no he escrito ninguna historia aquí. cuando tenga algo que compartir, lo encontrarás en este lugar.</p>{% endfor %}</section>
+<section class="wrap archive-page">
+  <header class="archive-header"><div class="eyebrow">escenas, ideas y recuerdos</div><h1>todas las historias<span>.</span></h1><p>aquí encontrarás lo que he escrito, ordenado por año.</p></header>
+  {% if site.posts.size > 0 %}
+  <div class="archive-tools" hidden>
+    <label for="story-search">buscar en mis historias</label>
+    <div class="archive-search"><input id="story-search" type="search" placeholder="busca una palabra o un tema" autocomplete="off"><button type="button" class="archive-clear" hidden>limpiar</button></div>
+    {% assign categories = site.posts | map: 'category' | compact | uniq | sort %}
+    <div class="archive-categories" role="group" aria-label="filtrar por categoría"><button type="button" data-category="" aria-pressed="true">todas</button>{% for category in categories %}{% if category != empty %}<button type="button" data-category="{{ category | escape }}" aria-pressed="false">{{ category }}</button>{% endif %}{% endfor %}</div>
+    <p class="archive-result-count" role="status" aria-live="polite"></p>
+  </div>
+  {% endif %}
+  {% assign years = site.posts | group_by_exp: 'post', 'post.date | date: "%Y"' %}
+  {% for year in years %}
+    <section class="archive-year" aria-labelledby="year-{{ year.name }}"><h2 id="year-{{ year.name }}">{{ year.name }}</h2><div class="post-list">{% for post in year.items %}<article class="post-row" data-category="{{ post.category | default: 'notas' | escape }}" data-search="{{ post.title | append: ' ' | append: post.description | append: ' ' | append: post.content | strip_html | normalize_whitespace | escape }}"><div class="post-meta"><span>{{ post.category | default: 'notas' }}</span><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%d.%m.%Y' }}</time></div><div class="post-summary"><h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3><p>{{ post.description | default: post.excerpt | strip_html }}</p></div></article>{% endfor %}</div></section>
+  {% else %}<p>todavía no he escrito ninguna historia aquí. cuando tenga algo que compartir, lo encontrarás en este lugar.</p>{% endfor %}
+  <div class="archive-no-results" hidden><p>no encontré historias con esas palabras.</p><button type="button">ver todas las historias</button></div>
+</section>
+<script src="{{ '/assets/js/archive-search.js' | relative_url }}" defer></script>
