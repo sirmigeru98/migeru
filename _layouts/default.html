@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="{{ site.lang | default: 'es' }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{{ page.description | default: site.description | escape }}">
+  <title>{% if page.title %}{{ page.title | escape }} · {% endif %}{{ site.title | escape }}</title>
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <link rel="alternate" type="application/atom+xml" title="{{ site.title | escape }}" href="{{ '/feed.xml' | relative_url }}">
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <div class="desktop-bar"><span class="desktop-apple" aria-hidden="true">✳</span><strong>migeru</strong><span>Un espacio personal</span></div>
+  <div class="site-window">
+    <div class="window-titlebar"><div class="window-lights" aria-hidden="true"><i></i><i></i><i></i></div><span class="window-title">migeru</span><span class="window-placeholder" aria-hidden="true"></span></div>
+    <header class="site-header wrap">
+      <a class="brand" href="{{ '/' | relative_url }}"><span class="brand-mark">m<span>.</span></span><span>{{ site.title }}</span></a>
+      <nav aria-label="Navegación principal"><div class="nav-segment"><a href="{{ '/' | relative_url }}"{% if page.url == '/' %} aria-current="page"{% endif %}>Inicio</a><a href="{{ '/sobre-mi/' | relative_url }}"{% if page.url == '/sobre-mi/' %} aria-current="page"{% endif %}>Sobre mí</a></div><a class="nav-contact" href="mailto:sirmigeru@hotmail.com">Escríbeme</a></nav>
+    </header>
+    <main id="contenido">{{ content }}</main>
+    <footer class="site-footer wrap"><div><a class="brand footer-brand" href="{{ '/' | relative_url }}"><span class="brand-mark">m<span>.</span></span><span>{{ site.title }}</span></a><p>Un espacio para pensar en voz alta.</p></div><div class="footer-right"><a href="{{ '/feed.xml' | relative_url }}">RSS</a><span>© {{ 'now' | date: '%Y' }} {{ site.title }}</span></div></footer>
+  </div>
+</body>
+</html>

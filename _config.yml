@@ -1,0 +1,13 @@
+title: "migeru"
+description: "Un espacio personal sobre las cosas que pienso, vivo y quiero compartir."
+url: "https://sirmigeru98.github.io"
+baseurl: "/migeru"
+lang: es
+timezone: America/Bogota
+permalink: /:year/:month/:day/:title/
+markdown: kramdown
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor
