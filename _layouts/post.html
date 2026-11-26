@@ -2,7 +2,7 @@
 layout: default
 ---
 <article class="post-page wrap narrow">
-  <a class="back-link" href="{{ '/' | relative_url }}">← Todos los artículos</a>
+  <a class="back-link" href="{{ '/historias/' | relative_url }}">← Todas las historias</a>
   <header class="post-header"><div class="eyebrow">{{ page.category | default: 'NOTAS' }} <span> / </span> {{ page.date | date: '%d.%m.%Y' }}</div><h1>{{ page.title }}</h1>{% if page.description %}<p class="post-lead">{{ page.description }}</p>{% endif %}</header>
   <div class="post-content">{{ content }}</div>
   <div class="post-end">Gracias por acompañarme hasta aquí <span>✳</span></div>
