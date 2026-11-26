@@ -4,7 +4,7 @@ title: "Una entrada para verlo todo"
 description: "Una pequeña galería para probar imágenes, vídeo, audio y los elementos de una publicación."
 category: GUÍA VISUAL
 ---
-Esta entrada reúne contenido de ejemplo para comprobar cómo se ve una publicación con distintos formatos. Puedes editarla o eliminarla cuando ya no la necesites.
+Creé esta entrada para probar cómo se ven las imágenes, los vídeos y otros formatos que puedo compartir aquí. Es una pequeña muestra de lo que podrás encontrar en el blog.
 
 ## Imágenes
 
