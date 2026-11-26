@@ -11,15 +11,34 @@
     controls.className = 'gallery-controls';
     const previous = document.createElement('button');
     previous.type = 'button';
-    previous.textContent = 'anterior';
+    previous.className = 'gallery-previous';
+    previous.setAttribute('aria-label', 'imagen anterior');
+    previous.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5 7.5 12l7 7"/></svg>';
     const status = document.createElement('span');
     status.className = 'gallery-status';
     status.setAttribute('aria-live', 'polite');
     const next = document.createElement('button');
     next.type = 'button';
-    next.textContent = 'siguiente';
-    controls.append(previous, status, next);
-    gallery.insertAdjacentElement('afterend', controls);
+    next.className = 'gallery-next';
+    next.setAttribute('aria-label', 'imagen siguiente');
+    next.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 5 7 7-7 7"/></svg>';
+    const dots = document.createElement('div');
+    dots.className = 'gallery-dots';
+    dots.setAttribute('aria-label', 'elegir imagen');
+    const indicators = slides.map((slide, index) => {
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'gallery-dot';
+      dot.setAttribute('aria-label', `ir a la imagen ${index + 1}`);
+      dot.addEventListener('click', () => go(index));
+      dots.appendChild(dot);
+      return dot;
+    });
+    controls.append(previous, next, dots, status);
+    const frame = document.createElement('div');
+    frame.className = 'gallery-frame';
+    gallery.parentNode.insertBefore(frame, gallery);
+    frame.append(gallery, controls);
 
     let current = 0;
     const update = () => {
@@ -27,7 +46,11 @@
       current = Math.max(0, Math.min(slides.length - 1, Math.round(gallery.scrollLeft / width)));
       previous.disabled = current === 0;
       next.disabled = current === slides.length - 1;
-      status.textContent = `${current + 1} / ${slides.length}`;
+      status.textContent = `imagen ${current + 1} de ${slides.length}`;
+      indicators.forEach((dot, index) => {
+        if (index === current) dot.setAttribute('aria-current', 'true');
+        else dot.removeAttribute('aria-current');
+      });
     };
     const go = index => {
       const target = Math.max(0, Math.min(slides.length - 1, index));
