@@ -23,10 +23,9 @@ Para añadir una imagen de portada, guarda el archivo en `assets/media/` y agreg
 
 ```yaml
 cover: /assets/media/mi-imagen.jpg
-cover_alt: "Una descripción breve de la imagen"
 ```
 
-La portada es opcional; sin `cover`, el artículo se muestra normalmente.
+La portada aparece como fondo suave en la parte superior del artículo. Es opcional; sin `cover`, el artículo se muestra normalmente.
 
 ## Vista local
 

@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="{{ '/assets/css/migeru.css' | relative_url }}">
   <link rel="alternate" type="application/atom+xml" title="{{ site.title | escape }}" href="{{ '/feed.xml' | relative_url }}">
 </head>
-<body>
+<body{% if page.layout == "post" and page.cover %} class="has-post-cover" style="--post-cover: url('{{ page.cover | relative_url | escape }}')"{% endif %}>
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <div class="desktop-bar"><span class="desktop-apple" aria-hidden="true">✳</span><strong>migeru</strong><span>Un espacio personal</span></div>
   <div class="site-window">
