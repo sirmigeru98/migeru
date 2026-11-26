@@ -3,6 +3,8 @@ layout: post
 title: "Una entrada para verlo todo"
 description: "Un recorrido de prueba entre imágenes, sonidos y escenas que caben en este espacio."
 category: GUÍA VISUAL
+cover: /assets/media/cielo-y-margaritas.jpg
+cover_alt: 'Un cielo azul con nubes sobre un campo de margaritas'
 ---
 A veces una imagen me hace imaginar el aire de un lugar; otras, un sonido cambia por completo la escena que tenía en la cabeza. Creé esta entrada para probar cómo puedo guardar aquí esas distintas formas de contar algo. Todavía es una prueba, pero quería que también se sintiera parte de este espacio.
 

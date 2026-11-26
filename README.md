@@ -1,4 +1,4 @@
-﻿# Entre líneas
+# Entre líneas
 
 Blog personal minimalista creado con Jekyll y compatible con GitHub Pages.
 
@@ -18,6 +18,15 @@ category: NOTAS
 
 Escribe aquí en Markdown.
 ```
+
+Para añadir una imagen de portada, guarda el archivo en `assets/media/` y agrega estas líneas al encabezado del artículo (antes del segundo `---`):
+
+```yaml
+cover: /assets/media/mi-imagen.jpg
+cover_alt: "Una descripción breve de la imagen"
+```
+
+La portada es opcional; sin `cover`, el artículo se muestra normalmente.
 
 ## Vista local
 
