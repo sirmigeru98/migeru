@@ -96,3 +96,5 @@ body,button,input,textarea,select{text-transform:lowercase}.eyebrow{text-transfo
 .post-content .post-cover{margin:0 0 2.5em}.post-content .post-cover img{width:100%;height:auto;display:block;border-radius:14px}
 /* La portada acompaña el encabezado como fondo */
 body.has-post-cover{position:relative;isolation:isolate;background:#fbfbfc}body.has-post-cover::before{content:'';position:absolute;z-index:-1;top:0;left:0;right:0;height:600px;pointer-events:none;background-image:linear-gradient(to bottom,rgba(251,251,252,.55) 0%,rgba(251,251,252,.76) 54%,#fbfbfc 100%),var(--post-cover);background-position:center,center center;background-size:cover;background-repeat:no-repeat}@media(max-width:700px){body.has-post-cover::before{height:500px;background-position:center,center center}}
+/* El fondo de portada se desvanece al comenzar la lectura */
+body.has-post-cover::before{opacity:var(--cover-opacity,1)}
