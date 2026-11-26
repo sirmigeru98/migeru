@@ -69,7 +69,14 @@
     });
     if (media.matches('img, svg.media-illustration')) {
       media.classList.add('media-focus-clickable');
-      media.addEventListener('click', () => button.click());
+      media.setAttribute('tabindex', '0');
+      media.setAttribute('role', 'button');
+      media.setAttribute('aria-label', `Ampliar ${label}`);
+      const openFromMedia = () => { button.click(); opener = media; };
+      media.addEventListener('click', openFromMedia);
+      media.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openFromMedia(); }
+      });
     }
     if (media.matches('video')) {
       media.classList.add('media-focus-clickable');
