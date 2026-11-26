@@ -15,7 +15,7 @@
     const terms = normalize(search.value.trim()).split(/\s+/).filter(Boolean);
     let visible = 0;
     posts.forEach(post => {
-      const text = normalize(post.dataset.search || '');
+      const text = normalize((post.dataset.category || '') + ' ' + (post.dataset.search || ''));
       const matches = (!category || normalize(post.dataset.category || '') === category) && terms.every(term => text.includes(term));
       post.hidden = !matches;
       if (matches) visible++;
