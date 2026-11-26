@@ -33,15 +33,21 @@
   document.addEventListener('keydown', event => { if (event.key === 'Escape' && !desktop.matches && details.open) { details.open = false; summary.focus(); } });
   document.addEventListener('click', event => { if (!desktop.matches && details.open && !nav.contains(event.target)) details.open = false; });
   const links = Array.from(list.querySelectorAll('a'));
+  let currentActive = -2;
+  let scheduled = false;
   const update = () => {
+    scheduled = false;
     let active = -1;
     headings.forEach((heading, index) => { if (heading.getBoundingClientRect().top <= 160) active = index; });
+    if (active === currentActive) return;
+    currentActive = active;
     links.forEach((link, index) => {
       if (index === active) link.setAttribute('aria-current', 'location');
       else link.removeAttribute('aria-current');
     });
   };
-  window.addEventListener('scroll', update, { passive: true });
-  window.addEventListener('resize', update, { passive: true });
+  const schedule = () => { if (!scheduled) { scheduled = true; requestAnimationFrame(update); } };
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule, { passive: true });
   update();
 })();
