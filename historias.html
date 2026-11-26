@@ -1,0 +1,6 @@
+---
+layout: default
+title: todas las historias
+permalink: /historias/
+---
+<section class="wrap archive-page"><header class="archive-header"><div class="eyebrow">el archivo de migeru</div><h1>todas las historias<span>.</span></h1><p>notas y momentos, ordenados por año.</p></header>{% assign years = site.posts | group_by_exp: 'post', 'post.date | date: "%Y"' %}{% for year in years %}<section class="archive-year" aria-labelledby="year-{{ year.name }}"><h2 id="year-{{ year.name }}">{{ year.name }}</h2><div class="post-list">{% for post in year.items %}<article class="post-row"><div class="post-meta"><span>{{ post.category | default: 'notas' }}</span><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%d.%m.%Y' }}</time></div><div class="post-summary"><h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3><p>{{ post.description | default: post.excerpt | strip_html }}</p></div></article>{% endfor %}</div></section>{% else %}<p>pronto habrá historias por aquí.</p>{% endfor %}</section>

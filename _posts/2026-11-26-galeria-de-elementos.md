@@ -29,9 +29,9 @@ Un vídeo con controles nativos del navegador:
 
 Un reproductor sencillo para escuchar una grabación:
 
-<audio controls preload="none">
-  <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3" type="audio/mpeg">
-  Tu navegador no puede reproducir este audio. <a href="https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3">Descargar audio</a>.
+<audio controls preload="metadata">
+  <source src="{{ '/assets/media/audio-ejemplo.mp3' | relative_url }}" type="audio/mpeg">
+  Tu navegador no puede reproducir este audio. <a href="{{ '/assets/media/audio-ejemplo.mp3' | relative_url }}">Descargar audio</a>.
 </audio>
 
 ## Texto y enlaces
@@ -61,12 +61,12 @@ console.log(mensaje);
 | Vídeo | Reproductor con controles |
 | Audio | Grabación con controles |
 
-Los archivos multimedia de esta entrada se cargan desde servicios externos y necesitan conexión a internet.
+Algunos ejemplos de esta entrada se cargan desde servicios externos y necesitan conexión a internet.
 ## Imagen animada
 
 <figure>
-  <img src="https://media.giphy.com/media/ICOgUNjpvO0PC/giphy.gif" alt="Animación de un gato escribiendo en un ordenador" loading="lazy">
-  <figcaption>Ejemplo de GIF animado.</figcaption>
+  <img src="{{ '/assets/media/tierra.gif' | relative_url }}" alt="Animación del planeta Tierra girando" loading="lazy">
+  <figcaption>La Tierra girando. Imagen de <a href="https://commons.wikimedia.org/wiki/File:Rotating_earth_(large).gif">Wikimedia Commons</a>.</figcaption>
 </figure>
 
 ## Galería de imágenes
@@ -106,9 +106,9 @@ Los archivos multimedia de esta entrada se cargan desde servicios externos y nec
 ## Documento PDF incrustado
 
 <div class="media-document">
-  <iframe title="Documento PDF de ejemplo" loading="lazy" src="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"></iframe>
+  <iframe title="Documento PDF de ejemplo" loading="lazy" src="{{ '/assets/media/ejemplo.pdf' | relative_url }}"></iframe>
 </div>
-<p class="media-caption"><a href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf">Abrir el PDF en otra pestaña</a></p>
+<p class="media-caption"><a href="{{ '/assets/media/ejemplo.pdf' | relative_url }}">Abrir el PDF en otra pestaña</a></p>
 
 ## Contenido de otra web
 
