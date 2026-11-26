@@ -1,41 +1,48 @@
-# Entre líneas
+# migeru
 
-Blog personal minimalista creado con Jekyll y compatible con GitHub Pages.
+Blog personal creado con Jekyll para GitHub Pages. El sitio publicado está en https://sirmigeru98.github.io/migeru/.
 
-## Personalizar
+## Crear una historia
 
-Edita `_config.yml` para cambiar el título, la descripción y la dirección del sitio. Sustituye `hola@ejemplo.com` en `_layouts/default.html` y `sobre-mi.html`, y adapta la página de presentación. Los artículos de `_posts` son ejemplos: edítalos o elimínalos.
-
-Para publicar un artículo, crea un archivo en `_posts` con el formato `AAAA-MM-DD-titulo.md` y este encabezado:
+Crea un archivo Markdown en `_posts` con el nombre `AAAA-MM-DD-titulo.md`:
 
 ```yaml
 ---
 layout: post
-title: "Título del artículo"
+title: "Título de la historia"
 description: "Una breve introducción."
-category: NOTAS
+category: videojuegos
+cover: /assets/media/mi-imagen.jpg
 ---
 
 Escribe aquí en Markdown.
 ```
 
-Para añadir una imagen de portada, guarda el archivo en `assets/media/` y agrega estas líneas al encabezado del artículo (antes del segundo `---`):
+La portada es opcional. Guarda la imagen en `assets/media/` y usa su ruta en `cover`; aparecerá como fondo en la parte superior del artículo. Para ocultar una entrada sin borrarla, añade `published: false` a su encabezado. Los archivos en `_drafts` no se publican de forma predeterminada.
 
-```yaml
-cover: /assets/media/mi-imagen.jpg
-```
-
-La portada aparece como fondo suave en la parte superior del artículo. Es opcional; sin `cover`, el artículo se muestra normalmente.
+La portada del blog muestra las seis publicaciones más recientes. La página `historias.html` reúne todas, con búsqueda y filtros que se generan a partir de sus categorías. Escribe las categorías de forma consistente para evitar duplicados.
 
 ## Vista local
 
-Necesitas Ruby y Bundler. Ejecuta `bundle install` y después `bundle exec jekyll serve`; abre la dirección que indique la terminal.
+Necesitas Ruby y Bundler. En la carpeta del proyecto ejecuta:
 
-## Publicar en GitHub Pages
+```powershell
+bundle install
+bundle exec jekyll serve
+```
 
-1. Sube estos archivos a un repositorio de GitHub.
-2. En `_config.yml`, establece `url` como `https://TU-USUARIO.github.io`. Si el repositorio es `TU-USUARIO.github.io`, deja `baseurl: ""`; si es un repositorio de proyecto, usa `baseurl: "/NOMBRE-DEL-REPOSITORIO"`.
-3. En **Settings → Pages**, elige **Deploy from a branch**, la rama principal y la carpeta `/ (root)`; guarda los cambios.
-4. Espera a que GitHub Pages construya el sitio. La dirección aparecerá en la misma sección de configuración.
+Abre la dirección que muestra la terminal; con la configuración actual suele ser `http://127.0.0.1:4000/migeru/`. Para incluir borradores en la vista local, usa `bundle exec jekyll serve --drafts`. Para comprobar la generación sin iniciar el servidor, usa `bundle exec jekyll build`.
 
-El feed Atom está disponible en `/feed.xml` (precedido por el `baseurl` si corresponde).
+## Archivos principales
+
+- `_config.yml`: título, descripción y dirección de GitHub Pages.
+- `_layouts/`: estructura compartida y plantilla de artículos.
+- `_posts/`: publicaciones; `_drafts/`: borradores locales.
+- `assets/css/migeru.css`: estilos del blog.
+- `assets/js/`: navegación, búsqueda y controles multimedia.
+- `assets/media/`: imágenes y otros recursos.
+- `assets/fonts/`: fuente Inter y su licencia.
+
+## Publicación
+
+GitHub Pages publica desde la rama `main`. Los cambios de una rama de prueba no aparecen en el sitio publicado hasta que se integren en `main` y se suban a GitHub. La configuración actual usa `url: https://sirmigeru98.github.io` y `baseurl: /migeru`.

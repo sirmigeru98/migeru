@@ -11,13 +11,17 @@
   const empty = archive.querySelector('.archive-no-results');
   let category = '';
   const normalize = value => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('es');
+  const entries = posts.map(post => ({
+    post,
+    category: normalize(post.dataset.category || ''),
+    text: normalize((post.dataset.category || '') + ' ' + (post.dataset.search || ''))
+  }));
   const update = () => {
     const terms = normalize(search.value.trim()).split(/\s+/).filter(Boolean);
     let visible = 0;
-    posts.forEach(post => {
-      const text = normalize((post.dataset.category || '') + ' ' + (post.dataset.search || ''));
-      const matches = (!category || normalize(post.dataset.category || '') === category) && terms.every(term => text.includes(term));
-      post.hidden = !matches;
+    entries.forEach(entry => {
+      const matches = (!category || entry.category === category) && terms.every(term => entry.text.includes(term));
+      entry.post.hidden = !matches;
       if (matches) visible++;
     });
     groups.forEach(group => { group.hidden = !group.querySelector('.post-row:not([hidden])'); });
