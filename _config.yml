@@ -8,6 +8,7 @@ permalink: /:year/:month/:day/:title/
 markdown: kramdown
 exclude:
   - README.md
+  - MANUAL.md
   - Gemfile
   - Gemfile.lock
   - vendor

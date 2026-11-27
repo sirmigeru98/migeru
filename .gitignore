@@ -1,6 +1,7 @@
-﻿_site/
+_site/
 .jekyll-cache/
 .jekyll-metadata
 .sass-cache/
 .bundle/
 vendor/
+/MANUAL.md
