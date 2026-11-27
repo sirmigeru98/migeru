@@ -9,6 +9,13 @@
   document.body.appendChild(dialog);
   const stage = dialog.querySelector('.media-focus-content');
   const caption = dialog.querySelector('.media-focus-caption');
+  const pdfLink = document.createElement('a');
+  pdfLink.className = 'media-focus-pdf-link';
+  pdfLink.textContent = 'abrir el pdf en otra pestaña';
+  pdfLink.target = '_blank';
+  pdfLink.rel = 'noopener noreferrer';
+  pdfLink.hidden = true;
+  caption.insertAdjacentElement('afterend', pdfLink);
   let opener;
   let galleryImages = [];
   let galleryIndex = 0;
@@ -81,6 +88,9 @@
   dialog.addEventListener('close', () => {
     stage.replaceChildren();
     caption.textContent = '';
+    pdfLink.hidden = true;
+    pdfLink.removeAttribute('href');
+    dialog.classList.remove('media-focus--pdf');
     if (sourceGallery) { sourceGallery.scrollLeft = galleryIndex * sourceGallery.clientWidth; opener = galleryImages[galleryIndex]; }
     sourceGallery = null; galleryImages = []; galleryNav.hidden = true; dots.replaceChildren();
     unlockScroll();
@@ -96,11 +106,25 @@
     button.type = 'button';
     button.className = 'media-focus-trigger';
     const label = media.getAttribute('alt') || media.getAttribute('title') || (media.tagName.toLowerCase() === 'audio' ? 'audio' : media.tagName.toLowerCase() === 'video' ? 'vídeo' : 'gráfico');
-    button.setAttribute('aria-label', `Ampliar ${label}`);
-    button.innerHTML = '<span aria-hidden="true">⤢</span> Ampliar';
+    const isPdf = media.matches('iframe') && (container.closest('.media-document') || /\.pdf(?:$|[?#])/i.test(media.getAttribute('src') || ''));
+    button.setAttribute('aria-label', isPdf ? `Leer ${label} en modo de enfoque` : `Ampliar ${label}`);
+    button.innerHTML = isPdf ? 'leer en modo de enfoque' : '<span aria-hidden="true">⤢</span> Ampliar';
+    if (isPdf) button.classList.add('media-focus-pdf-trigger');
     container.appendChild(button);
     button.addEventListener('click', () => {
       opener = button;
+      pdfLink.hidden = true;
+      pdfLink.removeAttribute('href');
+      dialog.classList.toggle('media-focus--pdf', Boolean(isPdf));
+      if (isPdf) {
+        try {
+          const url = new URL(media.getAttribute('src'), document.baseURI);
+          if (url.protocol === 'http:' || url.protocol === 'https:') {
+            pdfLink.href = url.href;
+            pdfLink.hidden = false;
+          }
+        } catch (_) { /* El enlace alternativo se omite si la ruta no es válida. */ }
+      }
       const gallery = media.matches('img') ? container.closest('.media-gallery') : null;
       galleryImages = gallery ? Array.from(gallery.querySelectorAll('.media-focus-item > img')) : [];
       sourceGallery = galleryImages.length > 1 ? gallery : null;

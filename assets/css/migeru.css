@@ -2512,3 +2512,6 @@ opacity:1;
 transform:none}
 }
 }
+
+/* Acceso visible a la lectura de documentos PDF */
+.media-focus-item .media-focus-pdf-trigger,.media-focus-item .media-focus-pdf-trigger:focus-visible{position:absolute!important;top:auto!important;right:14px!important;bottom:14px!important;width:auto!important;height:auto!important;min-height:44px!important;margin:0!important;padding:10px 16px!important;overflow:visible!important;clip:auto!important;white-space:normal!important;border:1px solid rgba(255,255,255,.8)!important;border-radius:999px;background:rgba(35,34,36,.9);color:#fff;box-shadow:0 3px 14px #0004;font:500 13px Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer}.media-focus-item .media-focus-pdf-trigger:hover{background:#151515}.media-focus-pdf-link:not([hidden]){display:block;width:fit-content;margin:0 auto 18px;padding:8px 12px;color:#98430e;font-size:13px;text-decoration:underline;text-underline-offset:3px}.media-focus--pdf .media-focus-content iframe{height:min(75vh,800px)}@media(max-width:700px){.media-focus-item .media-focus-pdf-trigger,.media-focus-item .media-focus-pdf-trigger:focus-visible{right:10px!important;bottom:10px!important}.media-focus--pdf .media-focus-content iframe{height:65vh}}
