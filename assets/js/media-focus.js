@@ -67,9 +67,11 @@
   let scrollPosition = 0;
   let previousOverflow = '';
   let previousBodyStyle = '';
+  let scrollLocked = false;
 
   const lockScroll = () => {
     scrollPosition = window.scrollY;
+    scrollLocked = true;
     previousOverflow = document.documentElement.style.overflow;
     previousBodyStyle = document.body.getAttribute('style');
     document.documentElement.style.overflow = 'hidden';
@@ -80,12 +82,11 @@
     if (previousBodyStyle === null) document.body.removeAttribute('style');
     else document.body.setAttribute('style', previousBodyStyle);
     window.scrollTo({ top: scrollPosition, behavior: 'instant' });
+    scrollLocked = false;
   };
 
-  const close = () => dialog.close();
-  dialog.querySelector('.media-focus-close').addEventListener('click', close);
-  dialog.addEventListener('click', event => { if (event.target === dialog) close(); });
-  dialog.addEventListener('close', () => {
+  const cleanup = () => {
+    if (dialog.open || !scrollLocked) return;
     stage.replaceChildren();
     caption.textContent = '';
     pdfLink.hidden = true;
@@ -95,7 +96,12 @@
     sourceGallery = null; galleryImages = []; galleryNav.hidden = true; dots.replaceChildren();
     unlockScroll();
     if (opener) opener.focus({ preventScroll: true });
-  });
+  };
+  const close = () => { dialog.close(); cleanup(); };
+  dialog.querySelector('.media-focus-close').addEventListener('click', close);
+  dialog.addEventListener('click', event => { if (event.target === dialog) close(); });
+  dialog.addEventListener('cancel', event => { event.preventDefault(); close(); });
+  dialog.addEventListener('close', cleanup);
 
   content.querySelectorAll('img, video, audio, iframe, svg.media-illustration').forEach(media => {
     const container = document.createElement('div');
@@ -108,7 +114,8 @@
     const label = media.getAttribute('alt') || media.getAttribute('title') || (media.tagName.toLowerCase() === 'audio' ? 'audio' : media.tagName.toLowerCase() === 'video' ? 'vídeo' : 'gráfico');
     const isPdf = media.matches('iframe') && (container.closest('.media-document') || /\.pdf(?:$|[?#])/i.test(media.getAttribute('src') || ''));
     button.setAttribute('aria-label', isPdf ? `Leer ${label} en modo de enfoque` : `Ampliar ${label}`);
-    button.innerHTML = isPdf ? 'leer en modo de enfoque' : '<span aria-hidden="true">⤢</span> Ampliar';
+    button.innerHTML = isPdf ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4H4v4M16 4h4v4M4 16v4h4m12-4v4h-4M4 8l5-5m11 5-5-5M4 16l5 5m11-5-5 5"/></svg>' : '<span aria-hidden="true">⤢</span> Ampliar';
+    if (isPdf) button.title = 'leer en modo de enfoque';
     if (isPdf) button.classList.add('media-focus-pdf-trigger');
     container.appendChild(button);
     button.addEventListener('click', () => {
@@ -155,12 +162,26 @@
         if (Number.isFinite(media.currentTime)) copy.addEventListener('loadedmetadata', () => { try { copy.currentTime = media.currentTime; } catch (_) {} }, { once: true });
       }
       if (copy.matches('iframe')) copy.loading = 'eager';
-      stage.replaceChildren(copy);
+      let loading = null;
+      if (isPdf) {
+        loading = document.createElement('p');
+        loading.className = 'media-focus-loading';
+        loading.setAttribute('role', 'status');
+        loading.textContent = 'cargando documento…';
+        stage.replaceChildren(loading);
+      } else {
+        stage.replaceChildren(copy);
+      }
       const figure = container.closest('figure');
       caption.textContent = figure?.querySelector('figcaption')?.textContent || media.getAttribute('title') || media.getAttribute('alt') || '';
       dialog.showModal();
       lockScroll();
       dialog.querySelector('.media-focus-close').focus();
+      if (isPdf) {
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          if (dialog.open && stage.firstElementChild === loading) stage.replaceChildren(copy);
+        }));
+      }
     });
     if (media.matches('img, svg.media-illustration')) {
       media.classList.add('media-focus-clickable');
